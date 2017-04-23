@@ -1,17 +1,47 @@
 # Enter your code here. Read input from STDIN. Print output to STDOUT
 
 def long_pal(str)
-    len = str.length
-    while len > 0
-        str.chars.each_cons(len).each do |subarr|
-            substr = subarr.join("")
-            if substr == substr.reverse
-              return substr
-            end
-        end
-        len -= 1
+  return "" if str.empty?
+  return str if str.length == 1
+  len = str.length
+  min_start = 0
+  max_len = 1
+  start_index = 0
+  while start_index < len
+    break if (len - start_index) <= (max_len / 2)
+    start = stop = start_index
+    while stop < (len - 1) && (str[stop] == str[stop + 1])
+      stop += 1
     end
+    start_index = stop + 1
+    while (stop < len - 1) && (str[stop + 1] == str[start - 1])
+      stop += 1
+      start -= 1
+    end
+    new_len = stop - start + 1
+    if new_len > max_len
+      min_start = start
+      max_len = new_len
+    end
+  end
+  str.slice(min_start, max_len)
 end
+
+string longestPalindrome(string s) {
+    if (s.empty()) return "";
+    if (s.size() == 1) return s;
+    int min_start = 0, max_len = 1;
+    for (int i = 0; i < s.size();) {
+      if (s.size() - i <= max_len / 2) break;
+      int j = i, k = i;
+      while (k < s.size()-1 && s[k+1] == s[k]) ++k; // Skip duplicate characters.
+      i = k+1;
+      while (k < s.size()-1 && j > 0 && s[k + 1] == s[j - 1]) { ++k; --j; } // Expand.
+      int new_len = k - j + 1;
+      if (new_len > max_len) { min_start = j; max_len = new_len; }
+    }
+    return s.substr(min_start, max_len);
+}
 
 q = gets.chomp.to_i
 
